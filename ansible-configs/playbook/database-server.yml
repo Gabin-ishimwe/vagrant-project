@@ -1,0 +1,44 @@
+---
+- name: Configure Database Server with MySQL
+  hosts: databasevm
+  become: yes
+
+  tasks:
+    - name: Ping server to test connectivity
+      ping:
+
+    - name: Update packages
+      apt:
+        update_cache: yes
+
+    - name: Install packages
+      apt:
+        name:
+          - curl
+          - wget
+          - htop
+          - mysql-server
+          - python3-pymysql
+        state: present
+
+    - name: Start MySQL
+      systemd:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Set root password
+      mysql_user:
+        name: root
+        password: "password123"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+      ignore_errors: yes
+
+    - name: Create database
+      mysql_db:
+        name: testdb
+        state: present
+        login_user: root
+        login_password: "password123"
+      ignore_errors: yes

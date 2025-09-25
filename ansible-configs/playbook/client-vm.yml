@@ -1,0 +1,41 @@
+---
+- name: Configure Client VM with Apache
+  hosts: clientvm
+  become: yes
+
+  tasks:
+    - name: Ping server to test connectivity
+      ping:
+
+    - name: Update packages
+      apt:
+        update_cache: yes
+
+    - name: Install packages
+      apt:
+        name:
+          - curl
+          - wget
+          - htop
+          - apache2
+        state: present
+
+    - name: Start Apache
+      systemd:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Create HTML page
+      copy:
+        content: |
+          <html>
+          <head><title>Client VM - Apache</title></head>
+          <body>
+            <h1>Client VM - Apache Server</h1>
+            <p>Server: web-server-apache</p>
+            <p>Port: 8099</p>
+            <p>Configured with Ansible</p>
+          </body>
+          </html>
+        dest: /var/www/html/index.html

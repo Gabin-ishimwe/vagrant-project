@@ -17,11 +17,11 @@ Vagrant.configure("2") do |config|
 
   # Define Ansible Control Node - Ansible VM
   config.vm.define "control_node" do |vm1|
-    vm1.vm.hostname = "control_node"
+    vm1.vm.hostname = "controlnode"
     vm1.vm.network "private_network", ip: "192.168.56.10"
     
     vm1.vm.provider "virtualbox" do |vb|
-      vb.name = "control_node"
+      vb.name = "controlnode"
       vb.memory = "1024"  # 1GB RAM
       vb.cpus = 1
     end
@@ -51,6 +51,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "vm3" do |vm3|
     vm3.vm.hostname = "clientvm"
     vm3.vm.network "private_network", ip: "192.168.56.12"
+    vm2.vm.network "forwarded_port", guest: 80, host: 8099
     
   vm3.vm.provider "virtualbox" do |vb|
     vb.name = "vm3"

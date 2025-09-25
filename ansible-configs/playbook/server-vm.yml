@@ -1,0 +1,41 @@
+---
+- name: Configure Server VM with Nginx
+  hosts: servervm
+  become: yes
+
+  tasks:
+    - name: Ping server to test connectivity
+      ping:
+
+    - name: Update packages
+      apt:
+        update_cache: yes
+
+    - name: Install packages
+      apt:
+        name:
+          - curl
+          - wget
+          - htop
+          - nginx
+        state: present
+
+    - name: Start Nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Create HTML page
+      copy:
+        content: |
+          <html>
+          <head><title>Server VM - Nginx</title></head>
+          <body>
+            <h1>Server VM - Nginx Server</h1>
+            <p>Server: web-server-nginx</p>
+            <p>Port: 8089</p>
+            <p>Configured with Ansible</p>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
