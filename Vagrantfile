@@ -30,35 +30,50 @@ Vagrant.configure("2") do |config|
     vm1.vm.provision "shell", path: "provision_control_node.sh"
   end
 
-  # Define VM1 - Server VM
-  config.vm.define "vm1" do |vm1|
-    vm1.vm.hostname = "servervm"
-    vm1.vm.network "private_network", ip: "192.168.56.11"
-    vm1.vm.network "forwarded_port", guest: 80, host: 8089
+  # Define VM2 - Server VM
+  config.vm.define "vm2" do |vm2|
+    vm2.vm.hostname = "servervm"
+    vm2.vm.network "private_network", ip: "192.168.56.11"
+    vm2.vm.network "forwarded_port", guest: 80, host: 8089
     
-    vm1.vm.provider "virtualbox" do |vb|
-      vb.name = "vm1"
+    vm2.vm.provider "virtualbox" do |vb|
+      vb.name = "vm2"
       vb.memory = "4096"  # 4GB RAM
       vb.cpus = 2
     end
     
     # Provision with shell script
-    vm1.vm.provision "shell", path: "provision_server.sh"
+    # vm2.vm.provision "shell", path: "provision_server.sh"
   end
   
 
-  # Define VM2 - Client VM
-  config.vm.define "vm2" do |vm2|
-    vm2.vm.hostname = "clientvm"
-    vm2.vm.network "private_network", ip: "192.168.56.12"
+  # Define VM3 - Client VM
+  config.vm.define "vm3" do |vm3|
+    vm3.vm.hostname = "clientvm"
+    vm3.vm.network "private_network", ip: "192.168.56.12"
     
-  vm2.vm.provider "virtualbox" do |vb|
-    vb.name = "vm2"
+  vm3.vm.provider "virtualbox" do |vb|
+    vb.name = "vm3"
     vb.memory = "4096"  # 4GB RAM
       vb.cpus = 2
     end
 
     # Provision with shell script
-    vm2.vm.provision "shell", path: "provision_client.sh"
+    # vm3.vm.provision "shell", path: "provision_client.sh"
+  end
+
+  # Define VM4 - Database Server VM
+  config.vm.define "vm4" do |vm4|
+    vm4.vm.hostname = "databasevm"
+    vm4.vm.network "private_network", ip: "192.168.56.13"
+    
+  vm4.vm.provider "virtualbox" do |vb|
+    vb.name = "vm4"
+    vb.memory = "4096"  # 4GB RAM
+      vb.cpus = 2
+    end
+
+    # Provision with shell script
+    # vm4.vm.provision "shell", path: "provision_database.sh"
   end
 end
