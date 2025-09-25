@@ -20,6 +20,9 @@ Vagrant.configure("2") do |config|
     vm1.vm.hostname = "controlnode"
     vm1.vm.network "private_network", ip: "192.168.56.10"
     
+    # Sync ansible-configs directory to control node
+    vm1.vm.synced_folder "./ansible-configs", "/home/vagrant/ansible-configs"
+    
     vm1.vm.provider "virtualbox" do |vb|
       vb.name = "controlnode"
       vb.memory = "1024"  # 1GB RAM
@@ -51,7 +54,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "vm3" do |vm3|
     vm3.vm.hostname = "clientvm"
     vm3.vm.network "private_network", ip: "192.168.56.12"
-    vm2.vm.network "forwarded_port", guest: 80, host: 8099
+    vm3.vm.network "forwarded_port", guest: 80, host: 8099
     
   vm3.vm.provider "virtualbox" do |vb|
     vb.name = "vm3"
